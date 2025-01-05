@@ -1,6 +1,7 @@
 import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from "@/components/navbar/navbar";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
   children,
@@ -14,6 +15,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </TooltipProvider>
+        <Toaster position="top-center" />
       </body>
     </html>
   );
