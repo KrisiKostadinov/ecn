@@ -6,10 +6,16 @@ import { createSession } from "@/lib/session";
 
 export async function POST(req: Request) {
     try {
-        const { email, password } = await req.json();
+        const body = await req.json();
 
-        if (!email || !password) {
-            return NextResponse.json({ message: "Имейл адресът и паролата са задължителни" }, { status: 400 });
+        if (!body) {
+            return NextResponse.json({ message: "Липсва тяло на заявката" }, { status: 400 });
+        }
+
+        const { email, password, rememberMe } = body;
+
+        if (!email || !password || typeof rememberMe !== "boolean") {
+            return NextResponse.json({ message: "Имейл адресът, паролата и 'rememberMe' са задължителни" }, { status: 400 });
         }
 
         const user = await prisma.user.findUnique({ where: { email } });
@@ -24,10 +30,14 @@ export async function POST(req: Request) {
             return NextResponse.json({ message: "Невалидни са имейл адрес или парола" }, { status: 401 });
         }
 
+        const expires = rememberMe ?
+            Number(process.env.AUTH_SESSION_EXPIRES) * 1000 :
+            Number(process.env.AUTH_SESSION_EXPIRES) * 1000 * 30;
+        
         const token = await createSession(
             "token",
             { userId: user.id, role: user.roleAs },
-            Number(process.env.AUTH_SESSION_EXPIRES) * 1000
+            expires
         );
 
         if (!token) {

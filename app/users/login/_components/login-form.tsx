@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { EyeIcon, EyeOffIcon, KeyIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export default function LoginForm() {
     const router = useRouter();
@@ -107,6 +108,24 @@ export default function LoginForm() {
                                 </div>
                             </FormControl>
                             <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
+                <FormField
+                    control={form.control}
+                    name="rememberMe"
+                    render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                            <FormControl>
+                                <Checkbox
+                                    checked={field.value}
+                                    onCheckedChange={field.onChange}
+                                />
+                            </FormControl>
+                            <FormLabel>
+                                Запомни ме за (1 месец)
+                            </FormLabel>
                         </FormItem>
                     )}
                 />
