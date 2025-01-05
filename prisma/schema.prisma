@@ -16,6 +16,8 @@ model User {
   roleAs         Role   @default(USER) @map("role_as")
   gender         Gender @default(NOT_AVAILABLE)
   emailConfirmed Int    @default(0) @map("email_confirmed")
+  
+  @@map("users")
 }
 
 enum Role {

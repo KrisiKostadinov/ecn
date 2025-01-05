@@ -7,7 +7,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 
-import { LoginSchema, LoginFormValues } from "@/app/users/login/_schema";
+import {
+    RegisterSchema,
+    RegisterFormValues,
+    genders,
+} from "@/app/users/register/_schema";
 import {
     Form,
     FormControl,
@@ -20,30 +24,37 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { EyeIcon, EyeOffIcon, KeyIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
-export default function LoginForm() {
+export default function RegisterForm() {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
-    const form = useForm<LoginFormValues>({
-        resolver: zodResolver(LoginSchema),
-        defaultValues: { email: "", password: "", rememberMe: false },
+    const form = useForm<RegisterFormValues>({
+        resolver: zodResolver(RegisterSchema),
+        defaultValues: { email: "", password: "", gender: "NOT_AVAILABLE" },
     });
 
-    const onSubmit = async (values: LoginFormValues) => {
+    const onSubmit = async (values: RegisterFormValues) => {
         try {
-            const response = await axios.post("/api/users/login", values);
-            if (response.status === 200) {
-                toast.success("Login successful");
-                router.push("/");
+            const response = await axios.post("/api/users/register", values);
+            if (response.status === 201) {
+                toast.success("Регистрацията беше успешна!", { duration: 3000 });
+                router.push("/users/login");
             }
         } catch (error: any) {
             if (error.status === 404) {
-                return toast.error("Not found");
+                return toast.error("Ресурсът не е намерен");
             }
             if (error.response.data.message) {
                 return toast.error(error.response.data.message);
             }
-            toast.error("An error occurred");
+            toast.error("Възникна грешка");
         }
     };
 
@@ -111,18 +122,51 @@ export default function LoginForm() {
                     )}
                 />
 
+                <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Изберете Пол</FormLabel>
+                            <FormControl>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Изберете..." />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {genders.map((gender) => (
+                                            <SelectItem
+                                                key={gender.value}
+                                                value={gender.value}
+                                            >
+                                                {gender.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+
                 <div className="flex flex-col gap-5">
                     <Button
                         type="submit"
                         disabled={form.formState.isSubmitting}
                     >
-                        {form.formState.isSubmitting ? "Влизане..." : "Вход"}
+                        {form.formState.isSubmitting
+                            ? "Създаване..."
+                            : "Създаване на нов потребител"}
                     </Button>
 
                     <div>
-                        <span>Все още нямате акаунт?</span>
+                        <span>Вече имате създаден акаунт?</span>
                         <Button asChild variant={"link"}>
-                            <Link href={"/users/register"}>Натиснете тук!</Link>
+                            <Link href={"/users/login"}>Натиснете тук!</Link>
                         </Button>
                     </div>
                 </div>

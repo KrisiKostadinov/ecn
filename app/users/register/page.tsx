@@ -1,17 +1,17 @@
 import { Metadata } from "next";
 
-import LoginForm from "@/app/users/login/_components/login-form";
+import RegisterForm from "@/app/users/register/_components/register-form";
 import CardWrapper from "@/app/users/_components/card-wrapper";
 
 export const metadata: Metadata = {
-    title: `Вход - ${process.env.SITE_NAME}`,
-    description: `Вход - ${process.env.SITE_NAME}`,
+    title: `Нов потребител - ${process.env.SITE_NAME}`,
+    description: `Нов потребител - ${process.env.SITE_NAME}`,
     keywords:
         "магазин за подъръци, подаръци, подаръци за жени, подаръци за мъже, подаръци за деца, подаръци за бебета, подаръци за бременни, подаръци за майки, подаръци за бащи, подаръци за братя, подаръци за сестри",
     category: "Shopping",
     openGraph: {
-        title: `Вход - ${process.env.SITE_NAME}`,
-        description: `Вход - ${process.env.SITE_NAME}`,
+        title: `Нов потребител - ${process.env.SITE_NAME}`,
+        description: `Нов потребител - ${process.env.SITE_NAME}`,
         type: "website",
         locale: "bg_BG",
         url: process.env.NEXT_PUBLIC_SITE_URL + "/",
@@ -31,8 +31,8 @@ export const metadata: Metadata = {
 export default async function LoginPage() {
     return (
         <div className="container mx-auto">
-            <CardWrapper title="Вход в акаунта">
-                <LoginForm />
+            <CardWrapper title="Създаване на нов потребител">
+                <RegisterForm />
             </CardWrapper>
         </div>
     );
