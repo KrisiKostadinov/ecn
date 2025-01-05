@@ -35,7 +35,7 @@ export async function POST(req: Request) {
             Number(process.env.AUTH_SESSION_EXPIRES) * 1000 * 30;
         
         const token = await createSession(
-            "token",
+            "auth",
             { userId: user.id, role: user.roleAs },
             expires
         );
