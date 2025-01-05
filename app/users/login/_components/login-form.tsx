@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { EyeIcon, EyeOffIcon, KeyIcon, MailIcon } from "lucide-react";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
+import useUserStore from "../../_stores/user";
 
 export default function LoginForm() {
     const router = useRouter();
@@ -29,12 +30,14 @@ export default function LoginForm() {
         resolver: zodResolver(LoginSchema),
         defaultValues: { email: "", password: "", rememberMe: false },
     });
+    const { setUser } = useUserStore();
 
     const onSubmit = async (values: LoginFormValues) => {
         try {
             const response = await axios.post("/api/users/login", values);
             if (response.status === 200) {
                 toast.success("Login successful");
+                setUser({ ...response.data.user });
                 router.push("/");
             }
         } catch (error: any) {

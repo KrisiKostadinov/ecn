@@ -1,22 +1,36 @@
-import "./globals.css";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "react-hot-toast";
 
-export default function RootLayout({
-  children,
+import "./globals.css";
+import Navbar from "@/components/navbar/navbar";
+import { getSession } from "@/lib/session";
+import { prisma } from "@/db/prisma";
+import DecodedUser from "@/components/navbar/decoded-user";
+
+export default async function RootLayout({
+    children,
 }: Readonly<{
-  children: React.ReactNode;
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body>
-        <TooltipProvider>
-          <Navbar />
-          {children}
-        </TooltipProvider>
-        <Toaster position="top-center" />
-      </body>
-    </html>
-  );
+    const decodedUser = await getSession("auth");
+    const user = await prisma.user.findUnique({
+        where: { id: decodedUser?.userId || "" },
+    });
+
+    return (
+        <html lang="bg">
+            <body>
+                <DecodedUser
+                    userId={decodedUser?.userId}
+                    role={decodedUser?.role}
+                    user={user}
+                />
+                <TooltipProvider>
+                    <Navbar />
+                    {children}
+                </TooltipProvider>
+                <Toaster position="top-center" />
+            </body>
+        </html>
+    );
 }
