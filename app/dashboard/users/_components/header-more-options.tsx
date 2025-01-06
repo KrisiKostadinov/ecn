@@ -26,7 +26,7 @@ export default function HeaderMoreOptions() {
     if (!confirm(message)) return;
 
     try {
-      const response = await axios.delete(`/api/users`);
+      const response = await axios.delete(`/api/users/delete`);
       if (response.status === 200) {
         toast.success("Изтриването беше успешно");
         router.refresh();
