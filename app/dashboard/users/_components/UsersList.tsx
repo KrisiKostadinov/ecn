@@ -29,13 +29,13 @@ type UsersListProps = {
   users: User[];
 };
 
-const genderMap = {
+export const genderMap = {
   MALE: "Мъжки",
   FEMALE: "Женски",
   NOT_AVAILABLE: "Не е определен",
 };
 
-const roleMap = {
+export const roleMap = {
   USER: "Потребител",
   ADMIN: "Администратор",
 };

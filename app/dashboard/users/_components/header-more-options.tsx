@@ -1,6 +1,9 @@
 "use client";
 
 import { MoreHorizontalIcon } from "lucide-react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 import {
   DropdownMenu,
@@ -9,11 +12,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import axios from "axios";
-import toast from "react-hot-toast";
-import { useRouter } from "next/navigation";
+import { jsonToCsv } from "@/lib/utils";
+import useUsersTableStore from "@/app/dashboard/users/_stores";
+import { genderMap, roleMap } from "@/app/dashboard/users/_components/UsersList";
 
 export default function HeaderMoreOptions() {
+  const { users } = useUsersTableStore();
   const router = useRouter();
 
   const onDelete = async () => {
@@ -38,6 +42,27 @@ export default function HeaderMoreOptions() {
     }
   };
 
+  const downloadCsv = () => {
+    const mappedUsers = users.map((user) => {
+      return {
+        emailConfirmed: user.emailConfirmed ? "Yes" : "No",
+        email: user.email,
+        gender: genderMap[user.gender],
+        roleAs: roleMap[user.roleAs],
+      };
+    });
+
+    const csvString = jsonToCsv(mappedUsers);
+    const bom = '\uFEFF';
+    const blob = new Blob([bom + csvString], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = "users.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -47,7 +72,9 @@ export default function HeaderMoreOptions() {
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
-        <DropdownMenuItem>Сваляне на всички (CVS)</DropdownMenuItem>
+        <DropdownMenuItem onClick={downloadCsv}>
+          Сваляне на всички (CVS)
+        </DropdownMenuItem>
         <DropdownMenuItem>Изпращане на имейл до всички</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onDelete}>

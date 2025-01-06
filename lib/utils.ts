@@ -1,6 +1,20 @@
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+    return twMerge(clsx(inputs));
+}
+
+export function jsonToCsv(jsonData: any[]): string {
+    if (!jsonData.length) return "";
+
+    const headers = Array.from(
+        new Set(jsonData.flatMap((obj) => Object.keys(obj)))
+    );
+
+    const csvRows = jsonData.map((row) =>
+        headers.map((field) => JSON.stringify(row[field] ?? "")).join(",")
+    );
+
+    return [headers.join(","), ...csvRows].join("\n");
 }
