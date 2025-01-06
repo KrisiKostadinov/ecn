@@ -35,7 +35,7 @@ export default function NavbarRightRoutes() {
               Навигация
             </SheetTitle>
             <Separator />
-            <SheetDescription id="navbar-right-routes">
+            <SheetDescription id="sidebar-right-routes">
               {navbarRoutes.map((route) => (
                 <NavbarIconRoute key={route.href} {...route} />
               ))}
