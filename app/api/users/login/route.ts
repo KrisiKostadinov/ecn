@@ -31,8 +31,8 @@ export async function POST(req: Request) {
         }
 
         const expires = rememberMe ?
-            Number(process.env.AUTH_SESSION_EXPIRES) * 1000 :
-            Number(process.env.AUTH_SESSION_EXPIRES) * 1000 * 30;
+            Number(process.env.AUTH_SESSION_EXPIRES) * 1000 * 24 * 30:
+            Number(process.env.AUTH_SESSION_EXPIRES) * 1000;
         
         const token = await createSession(
             "auth",
