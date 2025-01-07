@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { jsonToCsv } from "@/lib/utils";
 import useUsersTableStore from "@/app/dashboard/users/_stores";
-import { genderMap, roleMap } from "@/app/dashboard/users/_components/UsersList";
+import { genderMap, roleMap } from "@/app/dashboard/users/_types";
 
 export default function HeaderMoreOptions() {
   const { users } = useUsersTableStore();

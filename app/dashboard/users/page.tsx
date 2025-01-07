@@ -1,24 +1,34 @@
 import { Metadata } from "next";
 
-import PageHeader from "@/app/dashboard/_components/page-header";
 import { prisma } from "@/db/prisma";
-import UsersList from "@/app/dashboard/users/_components/UsersList";
-import HeaderMoreOptions from "./_components/header-more-options";
+import { Gender, Role, User } from "@prisma/client";
+import { columns } from "@/app/dashboard/users/_components/index/columns";
+import { DataTable } from "@/app/dashboard/users/_components/index/data-table";
+import PageHeader from "@/app/dashboard/_components/page-header";
+import HeaderMoreOptions from "@/app/dashboard/users/_components/header-more-options";
 
 export const metadata: Metadata = {
   title: "Users",
 };
 
-export default async function Users() {
+async function getData(): Promise<User[]> {
   const users = await prisma.user.findMany();
+  return users.map(user => ({
+    ...user,
+    emailConfirmed: user.emailConfirmed,
+  }));
+}
+
+export default async function Users() {
+  const data = await getData();
 
   return (
-    <div className="flex-1 mr-5">
+    <div className="flex-1 mx-5">
       <div className="flex items-center">
-        <PageHeader title={`Users (${users.length})`} />
+        <PageHeader title={`Users (${data.length})`} />
         <HeaderMoreOptions />
       </div>
-      <UsersList users={users} />
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }
