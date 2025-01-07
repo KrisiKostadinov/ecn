@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ImageIcon,
   LayoutDashboardIcon,
   LucideIcon,
   MenuIcon,
@@ -10,6 +11,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -21,7 +23,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 interface SidebarRoute {
@@ -45,6 +46,11 @@ const sidebarRoutes: SidebarRoute[] = [
     label: "Продукти",
     href: "/dashboard/products",
     icon: StretchHorizontal,
+  },
+  {
+    label: "Изображения",
+    href: "/dashboard/images",
+    icon: ImageIcon,
   },
   {
     label: "Поръчки",

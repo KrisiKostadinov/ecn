@@ -16,7 +16,7 @@ model User {
   roleAs         Role   @default(USER) @map("role_as")
   gender         Gender @default(NOT_AVAILABLE)
   emailConfirmed Int    @default(0) @map("email_confirmed")
-  
+
   @@map("users")
 }
 
@@ -32,3 +32,24 @@ enum Gender {
 }
 
 // ends user model
+
+// starts image model
+
+model Image {
+  id          String   @id @default(uuid())
+  url         String   @unique
+  name        String
+  title       String?
+  alt         String?
+  description String?
+  width       Int?
+  height      Int?
+  format      String?
+  size        Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("images")
+}
+
+// ends image model
