@@ -19,6 +19,8 @@ interface DeleteResponse {
 export const columns: ColumnDef<User>[] = [
     {
         accessorKey: "id",
+        header: () => null,
+        cell: () => null,
     },
     {
         accessorKey: "email",
