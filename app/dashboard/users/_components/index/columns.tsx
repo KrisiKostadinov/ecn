@@ -1,52 +1,69 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Gender, User } from "@prisma/client";
-import { ColumnDef } from "@tanstack/react-table";
-import axios from "axios";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, ArrowUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { ColumnDef } from "@tanstack/react-table";
+import axios from "axios";
 
-// Мапване на полове
-const genderMap: { [key in Gender]: string } = {
-    MALE: "Мъжки",
-    FEMALE: "Женски",
-    NOT_AVAILABLE: "Не е определено",
-};
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Gender, User } from "@prisma/client";
+import { genderMap } from "@/app/dashboard/users/_types";
 
-// Интерфейс за типизация на отговорите от API-то
 interface DeleteResponse {
     status: number;
     message?: string;
 }
 
-// Колони за таблицата
 export const columns: ColumnDef<User>[] = [
     {
         accessorKey: "id",
     },
     {
         accessorKey: "email",
-        header: "Имейл",
+        header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Имейл
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            )
+        },
     },
     {
         accessorKey: "gender",
-        header: "Пол",
+        header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Пол
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            )
+        },
         cell: ({ row }) => {
             return genderMap[row.getValue("gender") as Gender];
         },
     },
     {
         accessorKey: "emailConfirmed",
-        header: "Потвърден",
+        header: ({ column }) => {
+            return (
+              <Button
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Потвърден
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            )
+        },
         cell: ({ row }) => {
             return row.getValue("emailConfirmed") ? "Да" : "Не";
         },
