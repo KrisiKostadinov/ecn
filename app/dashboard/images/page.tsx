@@ -2,7 +2,8 @@ import { Metadata } from "next";
 
 import { prisma } from "@/db/prisma";
 import PageHeader from "@/app/dashboard/images/_components/page-header";
-import DisplayImageGallery from "@/app/dashboard/images/_components/display-images";
+import { columns } from "@/app/dashboard/images/_components/index/columns";
+import { DataTable } from "@/app/dashboard/images/_components/index/data-table";
 
 export const metadata: Metadata = {
   title: "Изображения",
@@ -33,7 +34,7 @@ export default async function ImagesPage({ searchParams }: ImagesPageProps) {
       <div className="flex justify-between items-center">
         <PageHeader length={data.length} />
       </div>
-      <DisplayImageGallery images={data} />
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }

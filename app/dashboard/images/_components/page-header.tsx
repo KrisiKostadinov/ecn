@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import useImageStore from "@/app/dashboard/images/_stores/image";
 import UploadPreview from "@/app/dashboard/images/_components/upload-preview";
 import Sorting from "@/app/dashboard/images/_components/sorting";
+import HeaderMoreOptions from "@/app/dashboard/images/_components/header-more-options";
 
 type PageHeaderProps = {
   length: number;
@@ -23,7 +24,8 @@ export default function PageHeader({ length }: PageHeaderProps) {
       <div className="w-full flex max-sm:flex-col max-sm:items-start max-sm:mb-5 justify-between items-center">
         <div className="text-2xl font-semibold my-5 mx-6 text-gray-600 flex gap-5">
           <span>Изображения ({length})</span>
-          <div className="hidden sm:block">
+          <div className="hidden sm:flex gap-5">
+            <HeaderMoreOptions />
             <Sorting />
           </div>
         </div>
