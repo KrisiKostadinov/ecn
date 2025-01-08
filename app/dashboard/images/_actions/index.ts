@@ -22,8 +22,9 @@ export async function uploadImage(props: ImageProps) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
 
-  const filePath = path.join(uploadDir, props.file.name);
-  const fullname = `uploads/${year}/${month}/${day}/` + Date.now() + "_" + props.file.name;
+  const filename = Date.now() + "_" + props.file.name;
+  const filePath = path.join(uploadDir, filename);
+  const fullname = `uploads/${year}/${month}/${day}/` + filename;
 
   try {
     const fileBuffer = await props.file.arrayBuffer();
