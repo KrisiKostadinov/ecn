@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
-import PageHeader from "@/app/dashboard/images/_components/page-header";
 import { prisma } from "@/db/prisma";
-import DisplayImageGallery from "./_components/display-images";
+import PageHeader from "@/app/dashboard/images/_components/page-header";
+import DisplayImageGallery from "@/app/dashboard/images/_components/display-images";
 
 export const metadata: Metadata = {
   title: "Изображения",

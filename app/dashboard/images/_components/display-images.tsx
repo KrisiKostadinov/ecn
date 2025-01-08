@@ -23,7 +23,7 @@ export default function DisplayImageGallery({
           {images.map((image, index) => (
             <div
               key={index}
-              className="bg-gray-100 max-w-full max-h-[200px] border rounded-lg relative group overflow-hidden"
+              className="bg-gray-100 w-full h-[200px] max-w-full max-h-[200px] border rounded-lg relative group overflow-hidden"
               onClick={() => onOpen(image.id)}
             >
               <Image
