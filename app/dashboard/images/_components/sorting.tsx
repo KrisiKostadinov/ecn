@@ -25,17 +25,17 @@ export default function Sorting() {
 
   return (
     <DropdownMenu>
-      <Button variant={"outline"} asChild className="w-40">
+      <Button variant={"outline"} asChild className="w-full">
         <DropdownMenuTrigger>
-          {sortMap[searchParams.get("sort") as "asc" as "desc"]}
+          {sortMap[searchParams.get("sort") as "asc" as "desc" || "desc"]}
         </DropdownMenuTrigger>
       </Button>
-      <DropdownMenuContent align="center" className="w-40">
+      <DropdownMenuContent align="center" className="w-full">
         <DropdownMenuItem onClick={() => onSort("desc")}>
-          Възходящ ред
+          Низходящ ред
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => onSort("asc")}>
-          Низходящ ред
+          Възходящ ред
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
