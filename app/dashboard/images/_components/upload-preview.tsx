@@ -4,6 +4,7 @@ import { DeleteIcon, ImageIcon, SaveIcon } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ export type ImageProps = {
 export default function UploadPreview() {
   const { isOpen, setOpen } = useImageStore();
   const [image, setImage] = useState<ImageProps | null>(null);
+  const router = useRouter();
 
   const onUpload = async () => {
     if (!image) {
@@ -45,6 +47,7 @@ export default function UploadPreview() {
     
     setImage(null);
     setOpen();
+    router.refresh();
   };
 
   const onChange = (event: FileChangeEvent) => {
@@ -159,7 +162,7 @@ export default function UploadPreview() {
           </div>
         )}
         <div>
-          <Button onClick={onUpload}>
+          <Button onClick={onUpload} disabled={!image}>
             <SaveIcon />
             <span>Запазване</span>
           </Button>

@@ -11,14 +11,19 @@ export async function uploadImage(props: ImageProps) {
     return { success: false, message: "Няма избрано изображение" };
   }
 
-  const uploadDir = path.join(process.cwd(), "public/uploads");
+  const now = new Date();
+  const year = now.getFullYear().toString();
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  const day = now.getDate().toString().padStart(2, '0');
+
+  const uploadDir = path.join(process.cwd(), "public/uploads", year, month, day);
 
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
   }
 
   const filePath = path.join(uploadDir, props.file.name);
-  const fullname = "uploads/" + Date.now() + "_" + props.file.name;
+  const fullname = `uploads/${year}/${month}/${day}/` + Date.now() + "_" + props.file.name;
 
   try {
     const fileBuffer = await props.file.arrayBuffer();

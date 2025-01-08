@@ -1,7 +1,14 @@
-import PageHeader from "./_components/page-header";
+import { Metadata } from "next";
+
+import PageHeader from "@/app/dashboard/images/_components/page-header";
+import { prisma } from "@/db/prisma";
+
+export const metadata: Metadata = {
+  title: "Изображения",
+};
 
 async function getData() {
-  const data: [] = [];
+  const data = await prisma.image.findMany();
   return data;
 }
 
