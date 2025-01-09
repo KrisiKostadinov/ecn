@@ -12,32 +12,20 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import useUsersTableStore from "@/app/dashboard/users/_stores";
+import { deleteAllImages } from "@/app/dashboard/images/_actions";
 
 export default function HeaderMoreOptions() {
-  const { users } = useUsersTableStore();
   const router = useRouter();
 
   const onDelete = async () => {
-    const message =
-      "Сигурни ли сте, че искате да изтриете всички изображения. Тази операция е необратима.";
-    if (!confirm(message)) return;
+    const result = await deleteAllImages();
 
-    try {
-      const response = await axios.delete(`/api/images/delete`);
-      if (response.status === 200) {
-        toast.success("Изтриването беше успешно");
-        router.refresh();
-      }
-    } catch (error: any) {
-      if (error.status === 404) {
-        return toast.error("Not found");
-      }
-      if (error.response.data.message) {
-        return toast.error(error.response.data.message);
-      }
-      toast.error("Нещо се обърка");
+    if (!result.success) {
+      return toast.error(result.error);
     }
+
+    toast.success("Изображението беше изтрито успешно");
+    router.refresh();
   };
 
   return (

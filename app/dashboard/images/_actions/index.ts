@@ -46,3 +46,62 @@ export async function uploadImage(props: ImageProps) {
     return { success: false, error };
   }
 }
+
+export async function deleteImage(id: string) {
+  if (!id) {
+    return { success: false, error: "Невалиден идентификатор на изображение" };
+  }
+
+  const prismaImage = await prisma.image.findUnique({ where: { id } });
+
+  if (!prismaImage) {
+    return { success: false, error: "Невалиден идентификатор на изображение" };
+  }
+
+  const uploadDir = path.join(process.cwd(), "public/");
+  const filePath = path.join(uploadDir, prismaImage.url);
+
+  try {
+    const result = await prisma.$transaction(async (prisma) => {
+      const deletedImage = await prisma.image.delete({ where: { id } });
+
+      if (!deletedImage) {
+        throw new Error("Неуспешно изтриване на изображението от базата данни");
+      }
+
+      await fs.unlink(filePath, (err) => {
+        if (err) throw err;
+      });
+
+      return deletedImage;
+    });
+
+    return { success: true, deletedImage: result };
+  } catch (error) {
+    return { success: false, error };
+  }
+}
+
+export async function deleteAllImages() {
+  try {
+    const images = await prisma.image.findMany();
+
+    if (!images.length) {
+      return { success: false, error: "Няма изображения за изтриване" };
+    }
+
+    const results = [];
+
+    for (const image of images) {
+      const result = await deleteImage(image.id);
+      if (!result.success) {
+        throw new Error(`Неуспешно изтриване на изображение с ID: ${image.id}`);
+      }
+      results.push(result.deletedImage);
+    }
+
+    return { success: true, deletedImages: results };
+  } catch (error) {
+    return { success: false, error };
+  }
+}

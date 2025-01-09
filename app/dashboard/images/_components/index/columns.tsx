@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -15,11 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Image as PrismaImage } from "@prisma/client";
-
-interface DeleteResponse {
-  status: number;
-  message?: string;
-}
+import { deleteImage } from "@/app/dashboard/images/_actions";
 
 export const columns: ColumnDef<PrismaImage>[] = [
   {
@@ -104,7 +101,14 @@ export const columns: ColumnDef<PrismaImage>[] = [
       const router = useRouter();
 
       const onDelete = async (id: string) => {
+        const result = await deleteImage(id);
 
+        if (!result.success) {
+          return toast.error(result.error);
+        }
+
+        toast.success("Изображението беше изтрито успешно");
+        router.refresh();
       };
 
       return (
