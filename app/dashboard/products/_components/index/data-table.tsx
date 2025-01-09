@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -34,6 +35,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
+  const router = useRouter();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -63,6 +65,10 @@ export function DataTable<TData, TValue>({
   React.useEffect(() => {
     table.setPageSize(pageSize);
   }, [pageSize, table]);
+
+  const onUpdate = (id: string) => {
+    router.push(`/dashboard/products/${id}`);
+  }
 
   return (
     <div className="rounded-md border">
@@ -102,6 +108,7 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => onUpdate(row.getValue("id"))}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

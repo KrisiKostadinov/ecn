@@ -12,7 +12,7 @@ type PageHeaderProps = {
   buttonText?: string;
   buttonLink?: string;
   className?: string;
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 export default function PageHeader({
