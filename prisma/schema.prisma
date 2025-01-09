@@ -48,8 +48,27 @@ model Image {
   size        Int?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  
+
   @@map("images")
 }
 
 // ends image model
+
+// starts product model
+
+model Product {
+  id              String  @id @default(uuid())
+  name            String  @unique @db.VarChar(255)
+  slug            String  @unique @db.VarChar(255)
+  description     String? @db.Text
+  originalPrice   Float?  @map("original_price")
+  sellingPrice    Float?  @map("selling_price")
+  quantity        Int?
+  metaTitle       String? @map("meta_title") @db.VarChar(70)
+  metaDescription String? @map("meta_description") @db.VarChar(160)
+  metaKeywords    String? @map("meta_keywords") @db.VarChar(1000)
+
+  @@map("products")
+}
+
+// ends product model

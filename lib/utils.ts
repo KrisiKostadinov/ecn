@@ -18,3 +18,12 @@ export function jsonToCsv(jsonData: any[]): string {
 
     return [headers.join(","), ...csvRows].join("\n");
 }
+
+export function createSlug(text: string): string {
+    return text
+        .toLowerCase()
+        .trim()
+        .replace(/[^\p{L}\p{N}\s-]/gu, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+}
