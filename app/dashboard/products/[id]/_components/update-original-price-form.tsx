@@ -25,35 +25,42 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updateName } from "@/app/dashboard/products/[id]/_actions";
+import { updateOriginalPrice } from "@/app/dashboard/products/[id]/_actions";
+import { formatPrice } from "@/lib/utils";
 
-export const ProductNameSchema = zod.object({
-  name: zod
-    .string({ message: "Името на продукта е задължително" })
-    .min(1, { message: "Името на продукта е задължително" })
-    .max(255, { message: "Името трябва да бъде до 255 символа" }),
+export const ProductOriginalPriceSchema = zod.object({
+  originalPrice: zod
+    .coerce
+    .number({ message: "Цената на продукта е задължителна" })
+    .min(1, { message: "Цената на продукта е задължителнa" })
 });
 
-export type ProductNameFormValues = zod.infer<typeof ProductNameSchema>;
+export type ProductOriginalPriceFormValues = zod.infer<typeof ProductOriginalPriceSchema>;
 
-type UpdateNameFormProps = {
+type UpdateOriginalPriceFormProps = {
   id: string;
-  name: string;
+  originalPrice: number | null;
 };
 
-export default function UpdateNameForm({ id, name }: UpdateNameFormProps) {
+export default function UpdateSlugForm({ id, originalPrice }: UpdateOriginalPriceFormProps) {
   const router = useRouter();
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const form = useForm<ProductNameFormValues>({
-    resolver: zodResolver(ProductNameSchema),
+  const form = useForm<UpdateOriginalPriceFormProps>({
+    resolver: zodResolver(ProductOriginalPriceSchema),
     defaultValues: {
-      name,
+      originalPrice,
     },
   });
 
-  const onSubmit = async (values: ProductNameFormValues) => {
-    const result = await updateName(id, values.name);
+  const onSubmit = async (values: UpdateOriginalPriceFormProps) => {
+    console.log(values.originalPrice);
+    
+    if (!values.originalPrice) {
+      return form.setError("originalPrice", { message: "Цената на продукта е задължителна" });
+    }
+
+    const result = await updateOriginalPrice(id, values.originalPrice);
 
     if (!result.success) {
       return toast.error(result.error || "Нещо се обърка");
@@ -67,8 +74,8 @@ export default function UpdateNameForm({ id, name }: UpdateNameFormProps) {
   return (
     <Card className="h-fit">
       <CardHeader>
-        <CardTitle>Име на продукта</CardTitle>
-        <CardDescription>{name ? name : "Няма"}</CardDescription>
+        <CardTitle>Цена на продукта</CardTitle>
+        <CardDescription>{originalPrice ? formatPrice(originalPrice) : "Няма"}</CardDescription>
       </CardHeader>
       <CardContent>
         {!isUpdate ? (
@@ -81,18 +88,21 @@ export default function UpdateNameForm({ id, name }: UpdateNameFormProps) {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               <FormField
                 control={form.control}
-                name="name"
+                name="originalPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Име на продукта</FormLabel>
+                    <FormLabel>Цена на продукта</FormLabel>
                     <FormControl>
                       <div className="relative flex items-center gap-2">
                         <ClipboardPen className="absolute left-2 w-5 h-5" />
                         <Input
-                          type="text"
+                          type="number"
                           {...field}
+                          value={field.value ?? ""}
                           className="pl-8"
                           disabled={form.formState.isSubmitting}
+                          step={0.01}
+                          formNoValidate
                           autoFocus
                         />
                       </div>
@@ -107,7 +117,7 @@ export default function UpdateNameForm({ id, name }: UpdateNameFormProps) {
                   <SaveIcon />
                   {form.formState.isSubmitting
                     ? "Запазване..."
-                    : "Запазване на името"}
+                    : "Запазване на цената"}
                 </Button>
                 <Button
                   variant={"outline"}

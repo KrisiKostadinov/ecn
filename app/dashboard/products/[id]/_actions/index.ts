@@ -12,7 +12,7 @@ export async function updateName(id: string, name: string) {
     data: { name }
   });
 
-  if (!name) {
+  if (!updatedProduct) {
     return { success: false, error: "Името на продукта е задължително" };
   }
 
@@ -37,8 +37,25 @@ export async function updateSlug(id: string, slug: string) {
     data: { slug }
   });
 
-  if (!slug) {
+  if (!updatedProduct) {
     return { success: false, error: "URL адресът на продукта е задължително" };
+  }
+
+  return { success: true, updatedProduct };
+}
+
+export async function updateOriginalPrice(id: string, originalPrice: number) {
+  if (!originalPrice) {
+    return { success: false, error: "Цената на продукта е задължителна" };
+  }
+
+  const updatedProduct = await prisma.product.update({
+    where: { id },
+    data: { originalPrice }
+  });
+
+  if (!updatedProduct) {
+    return { success: false, error: "Цената на продукта е задължителна" };
   }
 
   return { success: true, updatedProduct };

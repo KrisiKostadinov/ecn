@@ -1,7 +1,7 @@
 "use client";
 
 import * as zod from "zod";
-import { ClipboardPen, SaveIcon } from "lucide-react";
+import { ClipboardPen, PenIcon, SaveIcon } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -65,7 +65,7 @@ export default function UpdateSlugForm({ id, slug }: UpdateSlugFormProps) {
   };
 
   return (
-    <Card>
+    <Card className="h-fit">
       <CardHeader>
         <CardTitle>URL адрес на продукта</CardTitle>
         <CardDescription>{slug ? slug : "Няма"}</CardDescription>
@@ -73,7 +73,7 @@ export default function UpdateSlugForm({ id, slug }: UpdateSlugFormProps) {
       <CardContent>
         {!isUpdate ? (
           <Button variant={"outline"} onClick={() => setIsUpdate(!isUpdate)}>
-            <SaveIcon />
+            <PenIcon />
             <span>Редактиране</span>
           </Button>
         ) : (
