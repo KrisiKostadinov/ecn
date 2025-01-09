@@ -25,40 +25,45 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updateOriginalPrice } from "@/app/dashboard/products/[id]/_actions";
+import { updateSellingPrice } from "@/app/dashboard/products/[id]/_actions";
 import { formatPrice } from "@/lib/utils";
 
-export const ProductOriginalPriceSchema = zod.object({
-  originalPrice: zod
+export const ProductSellingPriceSchema = zod.object({
+  sellingPrice: zod
     .coerce
-    .number({ message: "Цената на продукта е задължителна" })
-    .min(1, { message: "Цената на продукта е задължителнa" })
+    .number({ message: "Промоцията на продукта е задължителна" })
+    .min(1, { message: "Промоцията на продукта е задължителнa" })
 });
 
-export type ProductOriginalPriceFormValues = zod.infer<typeof ProductOriginalPriceSchema>;
+export type ProductSellingPriceFormValues = zod.infer<typeof ProductSellingPriceSchema>;
 
-type UpdateOriginalPriceFormProps = {
+type UpdateSellingPriceFormProps = {
   id: string;
+  sellingPrice: number | null;
   originalPrice: number | null;
 };
 
-export default function UpdateSlugForm({ id, originalPrice }: UpdateOriginalPriceFormProps) {
+export default function UpdateSellingPriceForm({ id, sellingPrice, originalPrice }: UpdateSellingPriceFormProps) {
   const router = useRouter();
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const form = useForm<UpdateOriginalPriceFormProps>({
-    resolver: zodResolver(ProductOriginalPriceSchema),
+  const form = useForm<UpdateSellingPriceFormProps>({
+    resolver: zodResolver(ProductSellingPriceSchema),
     defaultValues: {
-      originalPrice,
+      sellingPrice,
     },
   });
 
-  const onSubmit = async (values: UpdateOriginalPriceFormProps) => {
-    if (!values.originalPrice) {
-      return form.setError("originalPrice", { message: "Цената на продукта е задължителна" });
+  const onSubmit = async (values: UpdateSellingPriceFormProps) => {
+    if (!values.sellingPrice) {
+      return form.setError("sellingPrice", { message: "Промоцията на продукта е задължителна" });
     }
 
-    const result = await updateOriginalPrice(id, values.originalPrice);
+    if (originalPrice && values.sellingPrice >= originalPrice) {
+      return form.setError("sellingPrice", { message: "Промоционалната цена не може да бъде по-висока или равна на основната цена" });
+    }
+
+    const result = await updateSellingPrice(id, values.sellingPrice);
 
     if (!result.success) {
       return toast.error(result.error || "Нещо се обърка");
@@ -72,8 +77,8 @@ export default function UpdateSlugForm({ id, originalPrice }: UpdateOriginalPric
   return (
     <Card className="h-fit">
       <CardHeader>
-        <CardTitle>Цена на продукта</CardTitle>
-        <CardDescription>{originalPrice ? formatPrice(originalPrice) : "Няма"}</CardDescription>
+        <CardTitle>Промоция на продукта</CardTitle>
+        <CardDescription>{sellingPrice ? formatPrice(sellingPrice) : "Няма"}</CardDescription>
       </CardHeader>
       <CardContent>
         {!isUpdate ? (
@@ -86,10 +91,10 @@ export default function UpdateSlugForm({ id, originalPrice }: UpdateOriginalPric
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
               <FormField
                 control={form.control}
-                name="originalPrice"
+                name="sellingPrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Цена на продукта</FormLabel>
+                    <FormLabel>Промоция на продукта</FormLabel>
                     <FormControl>
                       <div className="relative flex items-center gap-2">
                         <ClipboardPen className="absolute left-2 w-5 h-5" />
@@ -115,7 +120,7 @@ export default function UpdateSlugForm({ id, originalPrice }: UpdateOriginalPric
                   <SaveIcon />
                   {form.formState.isSubmitting
                     ? "Запазване..."
-                    : "Запазване на цената"}
+                    : "Запазване на промоцията"}
                 </Button>
                 <Button
                   variant={"outline"}

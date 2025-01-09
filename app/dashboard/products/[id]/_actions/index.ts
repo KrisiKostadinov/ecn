@@ -60,3 +60,20 @@ export async function updateOriginalPrice(id: string, originalPrice: number) {
 
   return { success: true, updatedProduct };
 }
+
+export async function updateSellingPrice(id: string, sellingPrice: number) {
+  if (!sellingPrice) {
+    return { success: false, error: "Промоцията на продукта е задължителна" };
+  }
+
+  const updatedProduct = await prisma.product.update({
+    where: { id },
+    data: { sellingPrice }
+  });
+
+  if (!updatedProduct) {
+    return { success: false, error: "Промоцията на продукта е задължителна" };
+  }
+
+  return { success: true, updatedProduct };
+}

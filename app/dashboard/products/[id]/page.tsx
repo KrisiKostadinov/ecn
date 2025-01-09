@@ -7,6 +7,7 @@ import PageHeader from "@/app/dashboard/_components/page-header";
 import UpdateNameForm from "@/app/dashboard/products/[id]/_components/update-name-form";
 import UpdateSlugForm from "@/app/dashboard/products/[id]/_components/update-slug-form";
 import UpdateOriginalPriceForm from "@/app/dashboard/products/[id]/_components/update-original-price-form";
+import UpdateSellingPriceForm from "@/app/dashboard/products/[id]/_components/update-selling-price-form";
 
 export const metadata: Metadata = {
   title: "Редактиране на продукта",
@@ -43,7 +44,18 @@ export default async function UpdateProductPage({
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         <UpdateNameForm id={product.id} name={product.name} />
         <UpdateSlugForm id={product.id} slug={product.slug} />
-        <UpdateOriginalPriceForm id={product.id} originalPrice={product.originalPrice} />
+      </div>
+      <div className="text-xl font-semibold my-5">Цена</div>
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <UpdateOriginalPriceForm
+          id={product.id}
+          originalPrice={product.originalPrice}
+        />
+        <UpdateSellingPriceForm
+          id={product.id}
+          sellingPrice={product.sellingPrice}
+          originalPrice={product.originalPrice}
+        />
       </div>
     </div>
   );
