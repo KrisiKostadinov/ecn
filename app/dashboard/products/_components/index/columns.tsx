@@ -139,7 +139,7 @@ export const columns: ColumnDef<Product>[] = [
             return toast.error(error.response.data.message);
           }
           if (error?.status === 404) {
-            return toast.error("Този продукт не е намерен");
+            return toast.error("Този ресурс не е намерен");
           }
           toast.error("Нещо се обърка");
         }

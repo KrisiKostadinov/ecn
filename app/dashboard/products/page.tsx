@@ -21,9 +21,15 @@ export default async function ProductsPage() {
 
   return (
     <div className="flex-1 mx-5">
-      <div className="flex items-center">
-        <PageHeader title={`Продукти (${data.length})`} />
-        <HeaderMoreOptions />
+      <div className="flex justify-between items-center">
+        <PageHeader
+          title={`Продукти (${data.length})`}
+          buttonLink="/dashboard/products/create"
+          buttonText="Добавяне на нов продукт"
+          className="w-full"
+        >
+          <HeaderMoreOptions />
+        </PageHeader>
       </div>
       <DataTable columns={columns} data={data} />
     </div>
