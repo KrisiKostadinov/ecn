@@ -1,23 +1,31 @@
-import PageHeader from "@/app/dashboard/_components/page-header";
 import { Metadata } from "next";
 
+import { prisma } from "@/db/prisma";
+import { Product } from "@prisma/client";
+import PageHeader from "@/app/dashboard/_components/page-header";
+import { DataTable } from "@/app/dashboard/products/_components/index/data-table";
+import { columns } from "@/app/dashboard/products/_components/index/columns";
+import HeaderMoreOptions from "@/app/dashboard/products/_components/header-more-options";
+
 export const metadata: Metadata = {
-  title: "Продукти"
+  title: "Продукти",
+};
+
+async function getData(): Promise<Product[]> {
+  const products = await prisma.product.findMany();
+  return products;
 }
 
 export default async function ProductsPage() {
-  const data = [];
+  const data = await getData();
 
   return (
     <div className="flex-1 mx-5">
-      <div className="flex justify-between items-center">
-        <PageHeader
-          title={`Products (${data.length})`}
-          buttonLink="/dashboard/products/create"
-          buttonText="Добавяне на нов продукт"
-          className="w-full"
-        />
+      <div className="flex items-center">
+        <PageHeader title={`Продукти (${data.length})`} />
+        <HeaderMoreOptions />
       </div>
+      <DataTable columns={columns} data={data} />
     </div>
   );
 }
