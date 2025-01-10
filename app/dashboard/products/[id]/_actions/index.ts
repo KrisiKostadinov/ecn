@@ -104,3 +104,12 @@ export async function updateMetaKeywords(id: string, metaKeywords: string) {
 
   return { success: true, updatedProduct };
 }
+
+export async function updateQuantity(id: string, quantity: number) {
+  const updatedProduct = await prisma.product.update({
+    where: { id },
+    data: { quantity }
+  });
+
+  return { success: true, updatedProduct };
+}

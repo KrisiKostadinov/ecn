@@ -11,6 +11,7 @@ import UpdateSellingPriceForm from "@/app/dashboard/products/[id]/_components/up
 import UpdateMetaTitleForm from "@/app/dashboard/products/[id]/_components/update-meta-title-form";
 import UpdateMetaDescriptionForm from "@/app/dashboard/products/[id]/_components/update-meta-description-form";
 import UpdateMetaKeywordsForm from "@/app/dashboard/products/[id]/_components/update-meta-keywords-form";
+import UpdateQuantityForm from "@/app/dashboard/products/[id]/_components/update-quantity-form";
 
 export const metadata: Metadata = {
   title: "Редактиране на продукта",
@@ -60,12 +61,13 @@ export default async function UpdateProductPage({
           originalPrice={product.originalPrice}
         />
       </div>
+      <div className="text-xl font-semibold my-5">Количество</div>
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        <UpdateQuantityForm id={product.id} quantity={product.quantity} />
+      </div>
       <div className="text-xl font-semibold my-5">SEO</div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-        <UpdateMetaTitleForm
-          id={product.id}
-          metaTitle={product.metaTitle}
-        />
+        <UpdateMetaTitleForm id={product.id} metaTitle={product.metaTitle} />
         <UpdateMetaDescriptionForm
           id={product.id}
           metaDescription={product.metaDescription}
