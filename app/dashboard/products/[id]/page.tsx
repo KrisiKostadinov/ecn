@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/db/prisma";
 import PageHeader from "@/app/dashboard/_components/page-header";
 
+import UpdateFeaturedImage from "@/app/dashboard/products/[id]/_components/update-featured-image";
 import UpdateNameForm from "@/app/dashboard/products/[id]/_components/update-name-form";
 import UpdateSlugForm from "@/app/dashboard/products/[id]/_components/update-slug-form";
 import UpdateOriginalPriceForm from "@/app/dashboard/products/[id]/_components/update-original-price-form";
@@ -44,15 +45,21 @@ export default async function UpdateProductPage({
   const productFeaturedImage = await prisma.productImage.findFirst({
     where: {
       productId: product.id,
-      place: "FEATURED"
-    }
+      place: "FEATURED",
+    },
+    include: {
+      image: true,
+    },
   });
 
   const productAdditionalImages = await prisma.productImage.findFirst({
     where: {
       productId: product.id,
-      place: "ADDITIONAL"
-    }
+      place: "ADDITIONAL",
+    },
+    include: {
+      image: true,
+    },
   });
 
   return (
@@ -60,6 +67,13 @@ export default async function UpdateProductPage({
       <div className="flex justify-between items-center">
         <PageHeader title="Редактиране на продукта" />
       </div>
+      <div className="flex gap-5">
+        <UpdateFeaturedImage
+          id={product.id}
+          featuredImage={productFeaturedImage?.image ?? null}
+        />
+      </div>
+      <div className="text-xl font-semibold my-5">Име</div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         <UpdateNameForm id={product.id} name={product.name} />
         <UpdateSlugForm id={product.id} slug={product.slug} />
