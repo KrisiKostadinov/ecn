@@ -9,7 +9,7 @@ export async function updateName(id: string, name: string) {
 
   const updatedProduct = await prisma.product.update({
     where: { id },
-    data: { name }
+    data: { name },
   });
 
   if (!updatedProduct) {
@@ -34,7 +34,7 @@ export async function updateSlug(id: string, slug: string) {
 
   const updatedProduct = await prisma.product.update({
     where: { id },
-    data: { slug }
+    data: { slug },
   });
 
   if (!updatedProduct) {
@@ -51,7 +51,7 @@ export async function updateOriginalPrice(id: string, originalPrice: number) {
 
   const updatedProduct = await prisma.product.update({
     where: { id },
-    data: { originalPrice }
+    data: { originalPrice },
   });
 
   if (!updatedProduct) {
@@ -68,7 +68,7 @@ export async function updateSellingPrice(id: string, sellingPrice: number) {
 
   const updatedProduct = await prisma.product.update({
     where: { id },
-    data: { sellingPrice }
+    data: { sellingPrice },
   });
 
   if (!updatedProduct) {
@@ -81,16 +81,19 @@ export async function updateSellingPrice(id: string, sellingPrice: number) {
 export async function updateMetaTitle(id: string, metaTitle: string) {
   const updatedProduct = await prisma.product.update({
     where: { id },
-    data: { metaTitle }
+    data: { metaTitle },
   });
 
   return { success: true, updatedProduct };
 }
 
-export async function updateMetaDescription(id: string, metaDescription: string) {
+export async function updateMetaDescription(
+  id: string,
+  metaDescription: string
+) {
   const updatedProduct = await prisma.product.update({
     where: { id },
-    data: { metaDescription }
+    data: { metaDescription },
   });
 
   return { success: true, updatedProduct };
@@ -99,7 +102,7 @@ export async function updateMetaDescription(id: string, metaDescription: string)
 export async function updateMetaKeywords(id: string, metaKeywords: string) {
   const updatedProduct = await prisma.product.update({
     where: { id },
-    data: { metaKeywords }
+    data: { metaKeywords },
   });
 
   return { success: true, updatedProduct };
@@ -108,8 +111,32 @@ export async function updateMetaKeywords(id: string, metaKeywords: string) {
 export async function updateQuantity(id: string, quantity: number) {
   const updatedProduct = await prisma.product.update({
     where: { id },
-    data: { quantity }
+    data: { quantity },
   });
 
   return { success: true, updatedProduct };
+}
+
+export async function updateFeaturedImage(productId: string, imageId: string) {
+  const image = await prisma.image.findFirst({
+    where: { id: imageId },
+  });
+
+  if (!image) {
+    return { success: false, error: "Няма намерена снимка" };
+  }
+
+  await prisma.productImage.deleteMany({
+    where: { productId, place: "FEATURED" },
+  });
+
+  await prisma.productImage.create({
+    data: {
+      place: "FEATURED",
+      imageId,
+      productId,
+    },
+  });
+
+  return { success: true };
 }

@@ -8,7 +8,8 @@ export async function GET(req: Request) {
     const session = await getSession("auth");
 
     const url = new URL(req.url);
-    const id = url.searchParams.get("id");
+    const page = Number(url.searchParams.get("page"));
+    const limit = Number(url.searchParams.get("limit"));
 
     if (!session || session.role !== "ADMIN") {
       return NextResponse.json(
@@ -24,9 +25,20 @@ export async function GET(req: Request) {
       );
     }
 
-    const images = await prisma.image.findMany();
+    const images = await prisma.image.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+    });
 
-    return NextResponse.json(images, { status: 200 });
+    const total = await prisma.image.count();
+
+    return NextResponse.json(
+      {
+        images,
+        total,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.log("[IMAGES/GET]:", error);
     return NextResponse.json({ message: "Сървърна грешка" }, { status: 500 });

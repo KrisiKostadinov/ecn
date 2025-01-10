@@ -69,7 +69,7 @@ export default async function UpdateProductPage({
       </div>
       <div className="flex gap-5">
         <UpdateFeaturedImage
-          id={product.id}
+          productId={product.id}
           featuredImage={productFeaturedImage?.image ?? null}
         />
       </div>

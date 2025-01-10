@@ -114,9 +114,9 @@ export const columns: ColumnDef<Product>[] = [
       );
     },
     cell: ({ row }) => {
-      return row.getValue("quantity")
-        ? formatPrice(row.getValue("quantity"))
-        : "Няма";
+      const quantity = Number(row.getValue("quantity"));
+      const fullLabel = `${quantity} ${quantity === 1 ? "брой" : "броя"}`;
+      return row.getValue("quantity") ? fullLabel : "Няма";
     },
   },
   {
