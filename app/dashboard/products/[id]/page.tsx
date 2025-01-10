@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 
 import { prisma } from "@/db/prisma";
 import PageHeader from "@/app/dashboard/_components/page-header";
+
 import UpdateNameForm from "@/app/dashboard/products/[id]/_components/update-name-form";
 import UpdateSlugForm from "@/app/dashboard/products/[id]/_components/update-slug-form";
 import UpdateOriginalPriceForm from "@/app/dashboard/products/[id]/_components/update-original-price-form";
@@ -39,6 +40,20 @@ export default async function UpdateProductPage({
     toast.error("Този продукт не е намерен");
     return redirect("/dashboard/products");
   }
+
+  const productFeaturedImage = await prisma.productImage.findFirst({
+    where: {
+      productId: product.id,
+      place: "FEATURED"
+    }
+  });
+
+  const productAdditionalImages = await prisma.productImage.findFirst({
+    where: {
+      productId: product.id,
+      place: "ADDITIONAL"
+    }
+  });
 
   return (
     <div className="flex-1 mx-5">
