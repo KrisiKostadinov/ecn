@@ -6,12 +6,21 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
 import { Image as PrismaImage } from "@prisma/client";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import useImageModalStore from "@/app/dashboard/_components/_stores/image-modal-store";
 import ImageModal from "@/app/dashboard/_components/image-modal";
-import { updateFeaturedImage } from "@/app/dashboard/products/[id]/_actions";
+import {
+  deleteFeaturedImage,
+  updateFeaturedImage,
+} from "@/app/dashboard/products/[id]/_actions";
+import { Button } from "@/components/ui/button";
 
-// Типизация на пропсовете
 type UploadFeaturedImageProps = {
   productId: string;
   featuredImage: PrismaImage | null;
@@ -33,6 +42,21 @@ export default function UploadFeaturedImage({
 
     router.refresh();
     toast.success("Снимката беше запазена");
+  };
+
+  const deleteImage = async () => {
+    if (!featuredImage) {
+      return toast.error("Няма запазена снимка на този продукт");
+    }
+
+    const result = await deleteFeaturedImage(productId, featuredImage.id);
+
+    if (!result.success) {
+      return toast.error(result.error || "Нещо се обърка");
+    }
+
+    router.refresh();
+    toast.success("Снимката беше премахната");
   };
 
   return (
@@ -63,13 +87,13 @@ export default function UploadFeaturedImage({
           </div>
         )}
       </CardContent>
-      <CardFooter className="p-4">
-        <button
-          onClick={toggleOpen}
-          className="w-full px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors"
-        >
-          Избери снимка
-        </button>
+      <CardFooter className="p-4 space-x-2">
+        <Button onClick={toggleOpen}>Избиране на снимка</Button>
+        {featuredImage && (
+          <Button variant={"outline"} onClick={deleteImage}>
+            Премахване на снимка
+          </Button>
+        )}
       </CardFooter>
 
       <ImageModal

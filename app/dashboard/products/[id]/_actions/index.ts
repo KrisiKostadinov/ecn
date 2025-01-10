@@ -140,3 +140,22 @@ export async function updateFeaturedImage(productId: string, imageId: string) {
 
   return { success: true };
 }
+
+export async function deleteFeaturedImage(productId: string, imageId: string) {
+  const image = await prisma.image.findFirst({
+    where: { id: imageId },
+  });
+
+  if (!image) {
+    return { success: false, error: "Няма намерена снимка" };
+  }
+
+  await prisma.productImage.deleteMany({
+    where: {
+      place: "FEATURED",
+      productId,
+    },
+  });
+
+  return { success: true };
+}
