@@ -40,3 +40,8 @@ export function formatPrice(
     maximumFractionDigits: 2,
   }).format(amount);
 }
+
+export function replaceNewlinesWithComma(text: string) {
+  const updatedText = text.replace(/\n/g, ", ");
+  return updatedText;
+}
