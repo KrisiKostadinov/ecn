@@ -63,7 +63,7 @@ export default async function UpdateProductPage({
   });
 
   return (
-    <div className="flex-1 mx-5">
+    <div className="flex-1 mx-5 mb-5">
       <div className="flex justify-between items-center">
         <PageHeader title="Редактиране на продукта" />
       </div>

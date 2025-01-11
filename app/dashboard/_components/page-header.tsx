@@ -1,17 +1,14 @@
 "use client";
 
-import { PlusIcon } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 type PageHeaderProps = {
   title: string;
   buttonText?: string;
   buttonLink?: string;
-  className?: string;
   children?: ReactNode;
 };
 
@@ -19,25 +16,30 @@ export default function PageHeader({
   title,
   buttonText,
   buttonLink,
-  className,
   children,
 }: PageHeaderProps) {
   return (
-    <div className={cn("flex justify-between items-center", className)}>
-      <div className="flex justify-between items-center">
-        <div className="text-2xl font-semibold my-5 mx-6 text-gray-600">
-          {title}
+    <>
+      <div className="w-full flex justify-between items-center">
+        <div className="flex items-center gap-5">
+          <div className="text-2xl font-semibold my-5 text-gray-600">
+            {title}
+          </div>
+          {children}
         </div>
-        {children}
+        {buttonLink && buttonText && (
+          <Link href={buttonLink}>
+            <Button className="hidden md:block">{buttonText}</Button>
+          </Link>
+        )}
       </div>
-      {buttonText && buttonLink && (
-        <Link href={buttonLink}>
-          <Button>
-            <PlusIcon />
-            {buttonText}
-          </Button>
-        </Link>
+      {buttonLink && buttonText && (
+        <div className="block md:hidden mb-5">
+          <Link href={buttonLink}>
+            <Button className="w-full">{buttonText}</Button>
+          </Link>
+        </div>
       )}
-    </div>
+    </>
   );
 }

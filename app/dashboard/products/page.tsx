@@ -12,7 +12,16 @@ export const metadata: Metadata = {
 };
 
 async function getData(): Promise<Product[]> {
-  const products = await prisma.product.findMany();
+  const products = await prisma.product.findMany({
+    include: {
+      images: {
+        include: {
+          image: true,
+        },
+      },
+    },
+  });
+
   return products;
 }
 
@@ -20,17 +29,14 @@ export default async function ProductsPage() {
   const data = await getData();
 
   return (
-    <div className="flex-1 mx-5">
-      <div className="flex justify-between items-center">
-        <PageHeader
-          title={`Продукти (${data.length})`}
-          buttonLink="/dashboard/products/create"
-          buttonText="Добавяне на нов продукт"
-          className="w-full"
-        >
-          <HeaderMoreOptions />
-        </PageHeader>
-      </div>
+    <div className="flex-1 mx-5 overflow-x-auto w-[400px]">
+      <PageHeader
+        title={`Продукти (${data.length})`}
+        buttonLink="/dashboard/products/create"
+        buttonText="Добавяне"
+      >
+        <HeaderMoreOptions />
+      </PageHeader>
       <DataTable columns={columns} data={data} />
     </div>
   );

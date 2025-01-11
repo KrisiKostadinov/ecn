@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { ColumnDef } from "@tanstack/react-table";
 import axios from "axios";
 
+import NextImage from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -14,8 +15,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Gender, Product, User } from "@prisma/client";
-import { genderMap } from "@/app/dashboard/users/_types";
+import { Image, Product } from "@prisma/client";
 import { formatPrice } from "@/lib/utils";
 
 interface DeleteResponse {
@@ -28,6 +28,43 @@ export const columns: ColumnDef<Product>[] = [
     accessorKey: "id",
     header: () => null,
     cell: () => null,
+  },
+  {
+    accessorKey: "images",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Предна снимка
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const images = row.getValue("images") as Array<{
+        place: string;
+        image: Image;
+      }>;
+      const featuredImage = images.find((x) => x.place === "FEATURED");
+      const image = featuredImage?.image;
+      const url = image?.url;
+
+      if (!url) {
+        return "Няма";
+      }
+
+      return (
+        <NextImage
+          src={`/${url}`}
+          alt={image.alt || ""}
+          width={image.width || 150}
+          height={image.height || 150}
+          className="w-[100px] h-[80px] object-cover rounded border"
+        />
+      );
+    },
   },
   {
     accessorKey: "name",

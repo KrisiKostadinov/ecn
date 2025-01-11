@@ -95,6 +95,97 @@ export const columns: ColumnDef<PrismaImage>[] = [
     },
   },
   {
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Дата
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const date = new Date(row.getValue("createdAt")).toLocaleDateString();
+      const time = new Date(row.getValue("createdAt")).toLocaleTimeString();
+      return `${date} ${time}`;
+    }
+  },
+  {
+    accessorKey: "format",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Формат
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+  },
+  {
+    accessorKey: "size",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Размер
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const size = Number(row.getValue("size"));
+
+      if (typeof size !== "number") {
+        return "Не е оказан";
+      }
+
+      const sizeAsString = `${(size / 1024 / 1024).toFixed(2)} MB`;
+      return sizeAsString;
+    }
+  },
+  {
+    accessorKey: "title",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Заглавие (HTML)
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return row.getValue("title") || "Няма";
+    }
+  },
+  {
+    accessorKey: "alt",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Алтернативен текст
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      return row.getValue("alt") || "Няма";
+    }
+  },
+  {
     accessorKey: "actions",
     header: "Опции",
     cell: ({ row }) => {

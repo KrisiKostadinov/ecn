@@ -15,7 +15,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import useImageStore from "@/app/dashboard/images/_stores/image";
+import useImageStore from "@/app/dashboard/images/_stores/upload-image";
 import { uploadImage } from "@/app/dashboard/images/_actions";
 
 interface FileChangeEvent extends ChangeEvent<HTMLInputElement> {

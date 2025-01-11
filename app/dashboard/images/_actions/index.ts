@@ -94,9 +94,11 @@ export async function deleteAllImages() {
 
     for (const image of images) {
       const result = await deleteImage(image.id);
+      
       if (!result.success) {
-        throw new Error(`Неуспешно изтриване на изображение с ID: ${image.id}`);
+        continue;
       }
+
       results.push(result.deletedImage);
     }
 

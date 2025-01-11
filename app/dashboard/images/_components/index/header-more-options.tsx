@@ -13,18 +13,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { deleteAllImages } from "@/app/dashboard/images/_actions";
+import useImageStore from "@/app/dashboard/images/_stores/upload-image";
 
 export default function HeaderMoreOptions() {
   const router = useRouter();
+  const { setOpen } = useImageStore();
 
   const onDelete = async () => {
+    if (!confirm("Тази операция ще изтрие всичките изображения, които не са поставени на продукти. Сигурени ли сте, че искате да продължите?")) return;
+
     const result = await deleteAllImages();
 
     if (!result.success) {
       return toast.error(result.error);
     }
 
-    toast.success("Изображението беше изтрито успешно");
+    if (!result.deletedImages?.length) {
+      return toast.error("Няма намерени изображения, които могат да бъдат изтрити.");
+    }
+    
+    toast.success(`Изображенията бяха изтрити успешно (${result.deletedImages?.length})`);
     router.refresh();
   };
 
@@ -37,11 +45,19 @@ export default function HeaderMoreOptions() {
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start">
+
+        <DropdownMenuItem onClick={setOpen}>
+          Качване
+        </DropdownMenuItem>
+
         <DropdownMenuItem>Изпращане на имейл до всички</DropdownMenuItem>
+        
         <DropdownMenuSeparator />
+        
         <DropdownMenuItem onClick={onDelete}>
           Изтриване на всички
         </DropdownMenuItem>
+
       </DropdownMenuContent>
     </DropdownMenu>
   );

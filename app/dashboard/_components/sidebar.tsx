@@ -70,7 +70,7 @@ export default function Sidebar() {
 
 function DesktopSidebar() {
   return (
-    <div className="hidden md:block max-w-xs w-full h-screen border-r-2 text-gray-600 border-gray-100 shadow-sm">
+    <div className="hidden md:block max-w-xs w-full sticky left-0 top-0 h-screen border-r-2 text-gray-600 border-gray-100 shadow-sm">
       <div className="text-2xl font-semibold text-center my-5">
         Администрация
       </div>
