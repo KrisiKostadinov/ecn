@@ -60,18 +60,3 @@ DATABASE_URL=postgresql://user:password@localhost:5432/mydb
 ```env
 JWT_SECRET=supersecretkey12345
 ```
-
----
-
-### AUTH_SESSION_EXPIRES
-**Описание:**  
-Определя времето на валидност на сесията за удостоверяване.
-
-**Възможни стойности:**  
-- Стойност в секунди (напр. `3600` за 1 час).
-- Стойност в секунди (напр. `86400` за 1 ден).
-
-**Пример:**  
-```env
-AUTH_SESSION_EXPIRES=3600
-```

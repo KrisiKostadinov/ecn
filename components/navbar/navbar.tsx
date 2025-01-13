@@ -1,42 +1,26 @@
-"use client";
-
 import Link from "next/link";
-import Image from "next/image";
-import { MenuIcon } from "lucide-react";
+import { AirVent } from "lucide-react";
+import { headers } from "next/headers";
 
-import NavbarIconRoutes from "@/components/navbar/navbar-icon-routes";
-import { Button } from "@/components/ui/button";
-import useNavbarStore from "@/components/navbar/_stores";
-import NavbarRightRoutes from "@/components/navbar/navbar-right-routes";
+import DesktopRoutes from "@/components/navbar/desktop-routes";
+import MobileRoutes from "@/components/navbar/mobile-routes";
+import { auth } from "@/lib/auth";
 
-export default function Navbar() {
-  const { toggleOpen } = useNavbarStore();
+export default async function Navbar() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return (
-    <nav className="h-20 border-b-2 text-gray-600 border-gray-100 shadow-sm max-md:px-4">
-      <div className="h-full container mx-auto flex items-center justify-between">
-        <div className="flex items-center">
-          <Link href="/" className="text-lg font-bold">
-            <Image
-              src={"/logo.svg"}
-              alt="logo"
-              className="w-[140px] h-[60px]"
-              width={140}
-              height={60}
-              priority
-            />
-          </Link>
-        </div>
-        <div className="h-full md:flex hidden items-center gap-5">
-          <NavbarIconRoutes />
-          <NavbarRightRoutes />
-        </div>
-        <div className="block md:hidden">
-          <Button variant={"outline"} size={"icon"} onClick={toggleOpen}>
-            <MenuIcon size={26} />
-          </Button>
-        </div>
+    <div className="bg-white border-b px-4">
+      <div className="flex items-center justify-between mx-auto max-w-4xl h-16">
+        <Link href={"/"} className="flex items-center gap-2">
+          <AirVent className="w-6 h-6" />
+          <span className="font-bold">ecn.</span>
+        </Link>
+        <DesktopRoutes className="md:flex hidden" />
+        <MobileRoutes session={session} />
       </div>
-    </nav>
+    </div>
   );
 }

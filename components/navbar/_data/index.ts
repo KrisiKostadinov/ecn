@@ -1,20 +1,41 @@
-import {
-  CircleUser,
-  Home,
-  LucideIcon,
-  ShoppingCart,
-  UserIcon,
-} from "lucide-react";
+import { HomeIcon, UserIcon, LogInIcon, MenuIcon } from "lucide-react";
 
-export interface NavbarRightRoutesProps {
+export interface NavbarRoute {
   href: string;
   label: string;
-  icon: LucideIcon;
+  Icon: React.ComponentType; // Използвай ComponentType вместо LucideIcon
 }
 
-export const navbarRoutes: NavbarRightRoutesProps[] = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/users/login", label: "Login", icon: CircleUser },
-  { href: "/users/my-account", label: "My Account", icon: UserIcon },
-  { href: "/cart", label: "Cart", icon: ShoppingCart },
+export const guestRoutes: NavbarRoute[] = [
+  {
+    label: "Вход",
+    href: "/sign-in",
+    Icon: LogInIcon, // Предай директно компонента
+  },
+];
+
+export const loggedInRoutes: NavbarRoute[] = [
+  {
+    label: "Моят акаунт",
+    href: "/account",
+    Icon: UserIcon,
+  },
+];
+
+export const navbarRoutes: NavbarRoute[] = [
+  {
+    label: "Начало",
+    href: "/",
+    Icon: HomeIcon,
+  },
+  {
+    label: "Моят акаунт",
+    href: "/my-account",
+    Icon: UserIcon,
+  },
+  {
+    label: "Количка",
+    href: "/cart",
+    Icon: MenuIcon,
+  },
 ];
