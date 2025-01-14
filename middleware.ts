@@ -27,6 +27,10 @@ export default async function authMiddleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/sign-in", request.nextUrl));
   }
 
+  if (session && isLoggedInRoute && session.user.role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/", request.nextUrl));
+  }
+
   if (session && isGuestRoute) {
     return NextResponse.redirect(new URL("/", request.nextUrl));
   }

@@ -17,6 +17,7 @@ model User {
   image         String?   @db.Text
   createdAt     DateTime
   updatedAt     DateTime
+  role          String
   sessions      Session[]
   accounts      Account[]
 
@@ -66,19 +67,6 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
-}
-
-// ends user model
-
-enum Role {
-  USER
-  ADMIN
-}
-
-enum Gender {
-  MALE
-  FEMALE
-  NOT_AVAILABLE
 }
 
 // ends user model
