@@ -14,6 +14,7 @@ import UpdateMetaTitleForm from "@/app/dashboard/products/[id]/_components/updat
 import UpdateMetaDescriptionForm from "@/app/dashboard/products/[id]/_components/update-meta-description-form";
 import UpdateMetaKeywordsForm from "@/app/dashboard/products/[id]/_components/update-meta-keywords-form";
 import UpdateQuantityForm from "@/app/dashboard/products/[id]/_components/update-quantity-form";
+import UploadMultipleImages from "@/components/dialogs/image-uploader/upload-multiple-images";
 
 export const metadata: Metadata = {
   title: "Редактиране на продукта",
@@ -106,6 +107,7 @@ export default async function UpdateProductPage({
           metaKeywords={product.metaKeywords}
         />
       </div>
+      <UploadMultipleImages />
     </div>
   );
 }

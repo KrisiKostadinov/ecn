@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ImageIcon } from "lucide-react";
+import { ImageIcon, UploadIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +20,13 @@ import {
   updateFeaturedImage,
 } from "@/app/dashboard/products/[id]/_actions";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import useUploadMultipleImagesStore from "@/components/dialogs/image-uploader/_stores/use-multiple-upload-images";
 
 type UploadFeaturedImageProps = {
   productId: string;
@@ -32,6 +39,8 @@ export default function UploadFeaturedImage({
 }: UploadFeaturedImageProps) {
   const router = useRouter();
   const { toggleOpen } = useImageModalStore();
+  const { isOpen, toggleOpen: toggleUploadMultipleImagesOpen } =
+    useUploadMultipleImagesStore();
 
   const onConfirm = async (selectedImages: PrismaImage[]) => {
     const result = await updateFeaturedImage(productId, selectedImages[0].id);
@@ -88,7 +97,31 @@ export default function UploadFeaturedImage({
         )}
       </CardContent>
       <CardFooter className="p-4 space-x-2">
-        <Button onClick={toggleOpen}>Избиране на снимка</Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant={"outline"} onClick={toggleOpen}>
+                <ImageIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Избиране на снимка</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant={"outline"}
+                onClick={toggleUploadMultipleImagesOpen}
+              >
+                <UploadIcon />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Качване на снимка</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
         {featuredImage && (
           <Button variant={"outline"} onClick={deleteImage}>
             Премахване на снимка
