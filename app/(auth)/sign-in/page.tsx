@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { headers } from "next/headers";
 
 import {
   Card,
@@ -11,17 +9,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import SignInForm from "@/app/(auth)/sign-in/_components/sign-in-form";
-import { auth } from "@/lib/auth";
 
 export default async function SignInPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (session) {
-    return redirect("/");
-  }
-
   return (
     <Card className="w-full max-w-md mx-auto mt-10">
       <CardHeader>
