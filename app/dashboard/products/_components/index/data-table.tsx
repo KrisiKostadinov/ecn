@@ -66,10 +66,6 @@ export function DataTable<TData, TValue>({
     table.setPageSize(pageSize);
   }, [pageSize, table]);
 
-  const onUpdate = (id: string) => {
-    router.push(`/dashboard/products/${id}`);
-  }
-
   return (
     <div className="rounded-md border">
       <div className="flex items-center py-4">
@@ -108,7 +104,6 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => onUpdate(row.getValue("id"))}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -136,10 +131,10 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-between space-x-2 py-4 px-5">
         <div className="flex items-center space-x-2">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger asChild className="w-[250px]">
               <Button variant={"outline"}>Показани са: {pageSize} на страница</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
+            <DropdownMenuContent align="start" className="w-[250px]">
               <DropdownMenuItem onClick={(e) => setPageSize(Number(5))}>5</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setPageSize(Number(10))}>10</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setPageSize(Number(20))}>20</DropdownMenuItem>

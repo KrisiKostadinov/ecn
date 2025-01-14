@@ -182,6 +182,10 @@ export const columns: ColumnDef<Product>[] = [
         }
       };
 
+      const onUpdate = (id: string) => {
+        router.push(`/dashboard/products/${id}`);
+      };
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -191,7 +195,9 @@ export const columns: ColumnDef<Product>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => onUpdate(row.getValue("id"))}>
+              Редактиране
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onDelete(row.getValue("id"))}>
               Изтриване
             </DropdownMenuItem>

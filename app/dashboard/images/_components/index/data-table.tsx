@@ -129,10 +129,10 @@ export function DataTable<TData, TValue>({
       <div className="flex items-center justify-between space-x-2 py-4 px-5">
         <div className="flex items-center space-x-2">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger asChild className="w-[250px]">
               <Button variant={"outline"}>Показани са: {pageSize} на страница</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
+            <DropdownMenuContent align="start" className="w-[250px]">
               <DropdownMenuItem onClick={(e) => setPageSize(Number(5))}>5</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setPageSize(Number(10))}>10</DropdownMenuItem>
               <DropdownMenuItem onClick={() => setPageSize(Number(20))}>20</DropdownMenuItem>
