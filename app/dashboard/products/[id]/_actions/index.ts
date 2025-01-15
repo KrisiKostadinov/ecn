@@ -78,6 +78,18 @@ export async function updateSellingPrice(id: string, sellingPrice: number) {
   return { success: true, updatedProduct };
 }
 
+export async function updateDescription(
+  id: string,
+  description: string | null
+) {
+  const updatedProduct = await prisma.product.update({
+    where: { id },
+    data: { description },
+  });
+
+  return { success: true, updatedProduct };
+}
+
 export async function updateMetaTitle(id: string, metaTitle: string) {
   const updatedProduct = await prisma.product.update({
     where: { id },

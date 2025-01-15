@@ -11,10 +11,11 @@ import UpdateSlugForm from "@/app/dashboard/products/[id]/_components/update-slu
 import UpdateOriginalPriceForm from "@/app/dashboard/products/[id]/_components/update-original-price-form";
 import UpdateSellingPriceForm from "@/app/dashboard/products/[id]/_components/update-selling-price-form";
 import UpdateMetaTitleForm from "@/app/dashboard/products/[id]/_components/update-meta-title-form";
+import UpdateDescriptionForm from "@/app/dashboard/products/[id]/_components/update-description-form";
 import UpdateMetaDescriptionForm from "@/app/dashboard/products/[id]/_components/update-meta-description-form";
 import UpdateMetaKeywordsForm from "@/app/dashboard/products/[id]/_components/update-meta-keywords-form";
 import UpdateQuantityForm from "@/app/dashboard/products/[id]/_components/update-quantity-form";
-import UpdateAddionalImages from "./_components/update-additional-images";
+import UpdateAddionalImages from "@/app/dashboard/products/[id]/_components/update-additional-images";
 
 export const metadata: Metadata = {
   title: "Редактиране на продукта",
@@ -86,6 +87,11 @@ export default async function UpdateProductPage({
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         <UpdateNameForm id={product.id} name={product.name} />
         <UpdateSlugForm id={product.id} slug={product.slug} />
+      </div>
+
+      <div className="text-xl font-semibold my-5">Описание</div>
+      <div>
+        <UpdateDescriptionForm id={product.id} description={product.description} />
       </div>
 
       <div className="text-xl font-semibold my-5">Цена</div>
