@@ -14,7 +14,7 @@ import UpdateMetaTitleForm from "@/app/dashboard/products/[id]/_components/updat
 import UpdateMetaDescriptionForm from "@/app/dashboard/products/[id]/_components/update-meta-description-form";
 import UpdateMetaKeywordsForm from "@/app/dashboard/products/[id]/_components/update-meta-keywords-form";
 import UpdateQuantityForm from "@/app/dashboard/products/[id]/_components/update-quantity-form";
-import UploadMultipleImages from "@/components/dialogs/image-uploader/upload-multiple-images";
+import UpdateAddionalImages from "./_components/update-additional-images";
 
 export const metadata: Metadata = {
   title: "Редактиране на продукта",
@@ -53,7 +53,7 @@ export default async function UpdateProductPage({
     },
   });
 
-  const productAdditionalImages = await prisma.productImage.findFirst({
+  const productAdditionalImages = await prisma.productImage.findMany({
     where: {
       productId: product.id,
       place: "ADDITIONAL",
@@ -63,22 +63,31 @@ export default async function UpdateProductPage({
     },
   });
 
+  const productImages = productAdditionalImages.map((x) => x.image);
+
   return (
     <div className="flex-1 mx-5 mb-5">
       <div className="flex justify-between items-center">
         <PageHeader title="Редактиране на продукта" />
       </div>
-      <div className="flex gap-5">
+
+      <div className="flex max-lg:flex-col gap-5">
         <UpdateFeaturedImage
           productId={product.id}
           featuredImage={productFeaturedImage?.image ?? null}
         />
+        <UpdateAddionalImages
+          productId={product.id}
+          images={productImages}
+        />
       </div>
+
       <div className="text-xl font-semibold my-5">Име</div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         <UpdateNameForm id={product.id} name={product.name} />
         <UpdateSlugForm id={product.id} slug={product.slug} />
       </div>
+
       <div className="text-xl font-semibold my-5">Цена</div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         <UpdateOriginalPriceForm
@@ -91,10 +100,12 @@ export default async function UpdateProductPage({
           originalPrice={product.originalPrice}
         />
       </div>
+
       <div className="text-xl font-semibold my-5">Количество</div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         <UpdateQuantityForm id={product.id} quantity={product.quantity} />
       </div>
+
       <div className="text-xl font-semibold my-5">SEO</div>
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         <UpdateMetaTitleForm id={product.id} metaTitle={product.metaTitle} />
@@ -107,7 +118,6 @@ export default async function UpdateProductPage({
           metaKeywords={product.metaKeywords}
         />
       </div>
-      <UploadMultipleImages />
     </div>
   );
 }

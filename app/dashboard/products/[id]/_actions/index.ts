@@ -159,3 +159,28 @@ export async function deleteFeaturedImage(productId: string, imageId: string) {
 
   return { success: true };
 }
+
+export async function updateAdditionalImages(
+  productId: string,
+  pathnames: Record<string, string>
+) {
+  for (const [id, pathname] of Object.entries(pathnames)) {
+    const image = await prisma.image.findFirst({
+      where: { id },
+    });
+
+    if (!image) {
+      return { success: false, error: "Няма намерена снимка" };
+    }
+
+    await prisma.productImage.create({
+      data: {
+        place: "ADDITIONAL",
+        productId,
+        imageId: id,
+      }
+    });
+  }
+
+  return { success: true };
+}

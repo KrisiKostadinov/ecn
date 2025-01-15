@@ -17,10 +17,16 @@ import { uploadImage } from "@/components/dialogs/image-uploader/_actions";
 
 type UploadMultipleImagesProps = {
   title?: string;
+  previewButtonText?: string;
+  numberOfAllwedImages?: number;
+  callback: (pathnames: Record<string, string>) => void;
 };
 
 export default function UploadMultipleImages({
-  title = "Качване на снимки",
+  title = "Качване на снимка",
+  numberOfAllwedImages = 1,
+  previewButtonText = "Избиране от файловата система",
+  callback,
 }: UploadMultipleImagesProps) {
   const { isOpen, toggleOpen, pathnames, setPathnames, isLoading } =
     useUploadMultipleImagesStore();
@@ -32,20 +38,24 @@ export default function UploadMultipleImages({
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <div className="min-h-[400px] flex flex-col gap-5">
-          {pathnames.length === 0 && !isLoading ? (
-            <UploadArea />
+          {Object.keys(pathnames).length === 0 && !isLoading ? (
+            <UploadArea
+              previewButtonText={previewButtonText}
+              numberOfAllwedImages={numberOfAllwedImages}
+            />
           ) : (
             <AfterUploadedImages />
           )}
           {isLoading && <LoadingSpinner />}
         </div>
-        {pathnames.length > 0 && (
+        {Object.keys(pathnames).length > 0 && (
           <DialogFooter>
             <div className="flex gap-5">
               <Button
                 onClick={() => {
                   toggleOpen();
-                  setPathnames([]);
+                  callback(pathnames);
+                  setPathnames({});
                 }}
               >
                 <CheckIcon />
@@ -73,13 +83,13 @@ const AfterUploadedImages = () => {
   return (
     <>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-        {pathnames.map((pathname, index) => (
+        {Object.entries(pathnames).map(([key, value], index) => (
           <div
             key={index}
             className="relative w-[150px] h-[100px] border shadow rounded overflow-hidden"
           >
             <Image
-              src={`/${pathname}`}
+              src={`/${value}`}
               alt={`Image-${index}`}
               className="object-cover w-full h-full"
               width={300}
@@ -93,7 +103,12 @@ const AfterUploadedImages = () => {
   );
 };
 
-const UploadArea = () => {
+type UploadAreaProps = {
+  previewButtonText: string;
+  numberOfAllwedImages: number;
+};
+
+const UploadArea = ({ previewButtonText, numberOfAllwedImages }: UploadAreaProps) => {
   const allowedTypes = ["image/png", "image/jpeg", "image/jpg"];
   const { setPathnames, toggleLoading, isLoading } =
     useUploadMultipleImagesStore();
@@ -125,11 +140,15 @@ const UploadArea = () => {
 
     const uploadedResult = await Promise.all(promises);
     toggleLoading();
-    setPathnames(
-      uploadedResult
-        .map((x) => x?.fullname)
-        .filter((name): name is string => !!name)
-    );
+
+    const pathnames: Record<string, string> = uploadedResult.reduce((acc, item) => {
+      if (item?.success && item?.id && item.fullname) {
+        acc[item.id] = item.fullname;
+      }
+      return acc;
+    }, {} as Record<string, string>);
+
+    setPathnames(pathnames);
   };
 
   const makeValidations = (images: File[]) => {
@@ -141,6 +160,15 @@ const UploadArea = () => {
       toast({
         title: "Грешка!",
         description: "Позволените формати са следните: PNG, JPG и JPEG.",
+      });
+
+      return false;
+    }
+
+    if (images.length > numberOfAllwedImages) {
+      toast({
+        title: "Грешка!",
+        description: `Не можете да качите повече от ${numberOfAllwedImages} снимки.`,
       });
 
       return false;
@@ -175,14 +203,14 @@ const UploadArea = () => {
         <form>
           <Button type="button" variant={"outline"} onClick={handleButtonClick}>
             <ImageIcon />
-            <span>Избиране от файловата система</span>
+            <span>{previewButtonText}</span>
           </Button>
           <input
             type="file"
             id="images"
             hidden
             onChange={handleChange}
-            multiple
+            multiple={numberOfAllwedImages > 1}
           />
         </form>
         <div className="text-center text-muted-foreground">

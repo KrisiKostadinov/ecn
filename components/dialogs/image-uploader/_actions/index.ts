@@ -31,17 +31,28 @@ const calculateUploadedImagesSize = ({
 
 type UploadImageResponse = {
   success: boolean;
-  fullname: string;
+  id?: string;
+  fullname?: string;
   error?: any;
-}
+};
 
-export const uploadImage = async (image: File, width: number, height: number): Promise<UploadImageResponse> => {
+export const uploadImage = async (
+  image: File,
+  width: number,
+  height: number
+): Promise<UploadImageResponse> => {
   const now = new Date();
   const year = now.getFullYear().toString();
-  const month = (now.getMonth() + 1).toString().padStart(2, '0');
-  const day = now.getDate().toString().padStart(2, '0');
+  const month = (now.getMonth() + 1).toString().padStart(2, "0");
+  const day = now.getDate().toString().padStart(2, "0");
 
-  const uploadDir = path.join(process.cwd(), "public/uploads", year, month, day);
+  const uploadDir = path.join(
+    process.cwd(),
+    "public/uploads",
+    year,
+    month,
+    day
+  );
 
   if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
@@ -63,11 +74,11 @@ export const uploadImage = async (image: File, width: number, height: number): P
         height,
         size: image.size,
         format: image.type,
-      }
+      },
     });
 
-    return { success: true, fullname };
+    return { success: true, fullname, id: newImage.id };
   } catch (error) {
-    return { success: false, fullname: "", error };
+    return { success: false, error };
   }
-}
+};
